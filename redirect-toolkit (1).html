@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+  :root{
+    --ink: #14201f;
+    --paper: #f6f2ea;
+    --panel: #1c2b29;
+    --ember: #d8622e;
+    --gold: #c9a15a;
+    --sage: #7a9484;
+    --line: rgba(246,242,234,0.14);
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 60px;
+  }
+
+  header{
+    padding: 44px 24px 28px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before{
+    content: "";
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(216,98,46,0.35), transparent 70%);
+  }
+  .eyebrow{
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 10px;
+  }
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 34px;
+    line-height: 1.05;
+    margin: 0 0 12px;
+    max-width: 320px;
+  }
+  .sub{
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: rgba(246,242,234,0.72);
+    max-width: 400px;
+    margin: 0;
+  }
+
+  .rule{
+    display:flex; align-items:center; gap:10px;
+    margin: 20px 24px 6px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(246,242,234,0.5);
+  }
+
+  .top-tabs{
+    display: flex;
+    gap: 0;
+    margin: 24px 24px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .top-tab{
+    flex: 1;
+    background: none;
+    border: none;
+    color: rgba(246,242,234,0.45);
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    padding: 0 0 14px;
+    cursor: pointer;
+    position: relative;
+  }
+  .top-tab.active{ color: var(--paper); }
+  .top-tab.active::after{
+    content: "";
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: var(--ember);
+  }
+  .view{ display: none; }
+  .view.active{ display: block; }
+
+  .practice-card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin: 14px 24px 0;
+  }
+  .practice-card h3{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 17px;
+    margin: 0 0 8px;
+    color: var(--gold);
+  }
+  .practice-card p{
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(246,242,234,0.75);
+    margin: 0 0 10px;
+  }
+  .practice-card p:last-child{ margin-bottom: 0; }
+  .practice-card .step{
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(246,242,234,0.75);
+    margin: 0 0 6px;
+    padding-left: 18px;
+    position: relative;
+  }
+  .practice-card .step::before{
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--sage);
+  }
+  .anchor-phrase{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--paper);
+    text-align: center;
+    padding: 16px 0;
+  }
+
+  nav{
+    display: flex;
+    gap: 8px;
+    padding: 14px 24px 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar{ display:none; }
+  .chip{
+    flex: none;
+    padding: 9px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    color: rgba(246,242,234,0.75);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .chip.active{
+    background: var(--ember);
+    border-color: var(--ember);
+    color: #1c1006;
+    font-weight: 600;
+  }
+
+  main{ padding: 8px 24px 24px; }
+
+  .section-label{
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--sage);
+    margin: 28px 0 4px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .section-label span.tag{
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(246,242,234,0.4);
+  }
+
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 16px 16px 18px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .card:active{ transform: scale(0.985); }
+  .card.hidden{ display:none; }
+
+  .dot{
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--ember);
+    margin-top: 8px;
+    flex: none;
+  }
+  .card-body h3{
+    margin: 0 0 4px;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 16.5px;
+  }
+  .card-body p{
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(246,242,234,0.68);
+  }
+
+  .intro-card{
+    background: linear-gradient(155deg, #22322f, #1c2b29);
+    border: 1px solid rgba(201,161,90,0.25);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin: 18px 24px 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: rgba(246,242,234,0.85);
+  }
+  .intro-card strong{ color: var(--gold); font-weight: 600; }
+
+  footer{
+    padding: 30px 24px 10px;
+    font-size: 12px;
+    color: rgba(246,242,234,0.35);
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Personal — not for anyone else's eyes</p>
+  <h1>The Kit</h1>
+  <p class="sub">For when the pressure builds and you need somewhere for it to go besides out at a person, or nowhere at all.</p>
+</header>
+
+<div class="top-tabs">
+  <button class="top-tab active" data-view="release">Release Kit</button>
+  <button class="top-tab" data-view="presence">Staying Present</button>
+  <button class="top-tab" data-view="wordbank">Word Bank</button>
+</div>
+
+<div class="view active" id="view-release">
+
+<div class="intro-card">
+  Not suppression. Not explosion. <strong>Feel it, then move it.</strong> Name it for a breath, then reach for whatever fits where you are and how much time you've got.
+</div>
+
+<div class="rule">Filter by where you are</div>
+<nav id="filters">
+  <button class="chip active" data-filter="all">Everything</button>
+  <button class="chip" data-filter="immediate">Right now, stuck</button>
+  <button class="chip" data-filter="short">5–20 min</button>
+  <button class="chip" data-filter="longer">Longer / planned</button>
+  <button class="chip" data-filter="night">2am, can't move</button>
+</nav>
+
+<main>
+
+  <div class="section-label">In the moment <span class="tag">under 2 min · anywhere</span></div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Name it, silently</h3>
+      <p>One word, no story. "Angry." "Offended." "Hurt." Let it register in your body for one breath before you do anything else. This alone lowers the charge.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="immediate">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Discharge, in place</h3>
+      <p>Wall push-offs, fast air punches, shake your limbs out like flinging off water. Spend the adrenaline, don't wait to calm down first.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Cold water</h3>
+      <p>Wrists, face. Blunts the physiological spike fast — it's a real reset button, not just a distraction.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Hold the tears at the brim</h3>
+      <p>Breathe slowly through your nose, unfocus your eyes for a second, press your tongue to the roof of your mouth. You're still feeling it — you're just managing the output for the room you're in.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Clench and release</h3>
+      <p>Full-body tension for 10 seconds, then drop it. A few rounds. Works seated, silent, in the dark, next to someone asleep.</p>
+    </div>
+  </div>
+
+  <div class="section-label">Vocal & expressive <span class="tag">5–20 min</span></div>
+  <div class="card" data-cat="short">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Sing it loud and ugly</h3>
+      <p>Not performance-pretty. You already have the instrument — use it as a tool on purpose, not just for joy.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="short">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Scream it out</h3>
+      <p>Into a pillow, or in the car with the windows up. Full volume, no audience.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="short night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Growl low</h3>
+      <p>Humming or growling in your chest — releases the tension without needing volume. Good for quiet hours or public places.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="short">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Dance until you're not composed</h3>
+      <p>No choreography. Move until the charge actually drops, not just until you feel silly for starting.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="short night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Ugly journal dump</h3>
+      <p>Ballpoint pen, no punctuation, no rereading. Get it out of your body and onto the page — this isn't for anyone, including future you.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="short">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Fast walk</h3>
+      <p>Around the block, around the store. Good for when you need to physically leave a space, not just sit in it.</p>
+    </div>
+  </div>
+
+  <div class="section-label">The bigger containers <span class="tag">longer / planned</span></div>
+  <div class="card" data-cat="longer">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Working out</h3>
+      <p>The main one. Something to push against — weights especially. Actually metabolizes the cortisol spike, not just distracts from it.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="longer">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Shadow boxing / hit a pillow</h3>
+      <p>Targeted release, built for anger specifically. Gives the impulse somewhere to land that isn't a person.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="longer">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Self-pleasure</h3>
+      <p>Full unrestrained release, on your own terms, always available. Not the only valve — but a real one.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="longer">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Diamond painting or building</h3>
+      <p>The come-down, after the charge is already spent. Occupies your hands, or channels the energy into something architectural — very you.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="longer">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Weighted pressure</h3>
+      <p>Weighted blanket, or your own arms wrapped tight around yourself. Deep pressure calms the nervous system directly.</p>
+    </div>
+  </div>
+
+  <div class="section-label">Cognitive redirect <span class="tag">stuck somewhere, can't move</span></div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>Count backward by 7s</h3>
+      <p>From 100. Occupies the analytical brain just enough to break the loop without becoming another bypass.</p>
+    </div>
+  </div>
+  <div class="card" data-cat="immediate night">
+    <div class="dot"></div>
+    <div class="card-body">
+      <h3>5-4-3-2-1 grounding</h3>
+      <p>Name 5 things you see, 4 you hear, 3 you feel. Useful when the anger tips into overwhelm rather than staying contained.</p>
+    </div>
+  </div>
+
+</main>
+
+</div>
+
+<div class="view" id="view-presence">
+
+  <div class="intro-card">
+    A different job than release: this is about <strong>noticing before it builds</strong> — catching yourself when you've checked out, and coming back into your body on purpose.
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">The anchor phrase</div>
+  <div class="practice-card">
+    <p>When you notice the physical signs starting — tears rising, heat, the urge to move, the pull to check out — say this, out loud or in your head:</p>
+    <div class="anchor-phrase">"Something's happening."</div>
+    <p>Not analyzing it. Just tagging it as it's occurring. It tells your mind: we can pay attention, it's okay, we don't have to check out. It's the bridge between body-knows and mind-knows.</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Body scan</div>
+  <div class="practice-card">
+    <p>A slow pass through your body to notice what's actually there, instead of staying in your head on autopilot.</p>
+    <div class="step">Start at the top of your head. Just notice — tight, relaxed, warm, nothing in particular.</div>
+    <div class="step">Move down slowly: jaw, shoulders, chest, stomach, hands, legs, feet.</div>
+    <div class="step">At each spot, don't fix or change anything. Just notice it's there.</div>
+    <div class="step">If your mind wanders off or you go back on autopilot, that's normal — just come back to the next spot.</div>
+    <p>Good for work, for robot-mode moments, for whenever you notice you've retreated into your head and gone on autopilot.</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">5-4-3-2-1 grounding</div>
+  <div class="practice-card">
+    <div class="step">5 things you can see</div>
+    <div class="step">4 things you can hear</div>
+    <div class="step">3 things you can feel (texture, temperature, weight)</div>
+    <div class="step">2 things you can smell</div>
+    <div class="step">1 thing you can taste</div>
+    <p>Works in low-stimulation moments and high-stimulation ones alike. The hearing part tends to work especially well for pulling you back into the room.</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Get Quiet <span class="tag">~90 sec, in order</span></div>
+  <div class="practice-card">
+    <p>For when the music in your head won't stop and you want silence. Do these in sequence.</p>
+    <div class="step"><strong>Cold shock (optional, 10 sec)</strong> — if you're near water, splash it on your wrists or face.</div>
+    <div class="step"><strong>Breath reset (30 sec)</strong> — inhale 4 counts, exhale 8 counts. Four rounds. The long exhale is what actually shifts you.</div>
+    <div class="step"><strong>Ground through senses (30 sec)</strong> — name 5 things you see, 4 you hear, 3 you can touch. Let your eyes actually land on each one.</div>
+    <div class="step"><strong>Physical anchor (20 sec)</strong> — press your feet flat into the floor and notice the sensation. Or press your palms together hard for 10 seconds, then release.</div>
+    <p>If the music's still there after — your mind's likely understimulated, not overstimulated. Give it something absorbing instead of trying to force silence: a walk, stretching, dishes with full attention.</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Body Check-In <span class="tag">training yourself to feel it before it ruptures</span></div>
+  <div class="practice-card">
+    <h3>Daily — 5 min body scan</h3>
+    <p>Lie down or sit still. Move attention slowly from feet up to head. At each area, just notice — tight, warm, numb, nothing. No fixing, no judging. Just data.</p>
+  </div>
+  <div class="practice-card">
+    <h3>3 check-in points — waking, lunch, before bed</h3>
+    <p>Ask "what am I feeling in my body" before "what am I thinking." Order matters — your mind will answer for the body if you let it go first.</p>
+  </div>
+  <div class="practice-card">
+    <h3>Catching attachment early — things you value</h3>
+    <p>Pause sometimes and ask: what does having this feel like in my body right now? Not why you like it — where you feel it. Ease in the chest. Settledness in the stomach.</p>
+  </div>
+  <div class="practice-card">
+    <h3>Catching attachment early — small irritations</h3>
+    <p>When something mildly bothers you, pause before naming it mentally. Ask: where in my body is this? That's the muscle that catches things before they build into a spiral.</p>
+  </div>
+  <div class="practice-card">
+    <h3>After strong feelings — sensation first, story second</h3>
+    <p>When journaling, write the physical sensation before the narrative. "Chest tight, stomach dropped" before "I was upset about X." Retrains which one you notice first.</p>
+  </div>
+  <div class="practice-card">
+    <p style="font-style:italic; color:var(--sage); margin:0;">Small and consistent beats occasional and intense. The goal isn't to feel everything today — it's to lower the threshold, gradually, so things register while they're still small.</p>
+  </div>
+
+</div>
+
+<div class="view" id="view-wordbank">
+
+  <div class="intro-card">
+    For when you feel something and don't have the word yet. Pick 2–3 that feel close, even if they seem to contradict — you're building the habit of reaching for language, not aiming for perfect accuracy.
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Texture / touch</div>
+  <div class="practice-card">
+    <p style="color:rgba(246,242,234,0.85);">Rough, smooth, soft, coarse, slick, grainy, ridged, silky, fuzzy, taut, loose, dense, light, cool, warm, dry, damp, sticky, crisp, supple</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Tension / release</div>
+  <div class="practice-card">
+    <p style="color:rgba(246,242,234,0.85);">Tight, tense, knotted, clenched, rigid, loose, relaxed, released, open, heavy, light, floaty</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Temperature / energy</div>
+  <div class="practice-card">
+    <p style="color:rgba(246,242,234,0.85);">Warm, cold, hot, cool, buzzing, tingling, electric, numb, flat, still, humming, restless</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Pressure / shape</div>
+  <div class="practice-card">
+    <p style="color:rgba(246,242,234,0.85);">Full, hollow, empty, sinking, rising, pressing, pulling, expanding, contracting, sharp, dull, achy</p>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">Emotional-physical blend</div>
+  <div class="practice-card">
+    <div class="step">Fluttery — nervous / excited</div>
+    <div class="step">Knotted — dread / worry</div>
+    <div class="step">Hollow — loss / sad</div>
+    <div class="step">Tight — anxious / holding</div>
+    <div class="step">Warm — safe / content</div>
+    <div class="step">Heavy — tired / burdened</div>
+    <div class="step">Light — relieved / free</div>
+    <div class="step">Buzzing — overstimulated / anxious</div>
+    <div class="step">Still — calm / settled</div>
+  </div>
+
+  <div class="section-label" style="margin-left:24px; margin-right:24px;">When stuck, compare instead</div>
+  <div class="practice-card">
+    <p>"Like a fist." "Like static." "Like a balloon deflating." "Like something sitting on my chest."</p>
+    <p style="font-style:italic; color:var(--sage);">Metaphor is a legitimate bridge before vocabulary catches up — not cheating, just how emotional language actually develops.</p>
+  </div>
+
+</div>
+
+<footer>
+  Feeling it isn't the danger. It's information.<br>
+  These tools just give it somewhere to go, so it never has to go through someone else.
+</footer>
+
+<script>
+  const topTabs = document.querySelectorAll('.top-tab');
+  const views = document.querySelectorAll('.view');
+  topTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      topTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.dataset.view;
+      views.forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + target).classList.add('active');
+    });
+  });
+
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.card');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      cards.forEach(card => {
+        if(filter === 'all' || card.dataset.cat.includes(filter)){
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
